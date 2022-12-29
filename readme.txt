@@ -10,7 +10,7 @@ Sources :
 
 Todo : 
 	Teams applicaties : table teammembers, managers, teams (python manage.py startapp teams)
-    Fatsoeneren van de login/logout/register html
+    OK : Fatsoeneren van de login/logout/register html
 	OK : Login/Logout scherm gekoppeld aan accounts
  
 Voeg een teammembers applicatie toe om employee info in kaart te brengen.
