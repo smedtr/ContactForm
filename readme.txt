@@ -6,12 +6,12 @@ Sources :
         https://realpython.com/django-user-management/
         https://www.codingforentrepreneurs.com/blog/how-to-create-a-custom-django-user-model/
     DB tabel
-	https://masteringdjango.com/django-tutorials/mastering-django-models/
+	    https://masteringdjango.com/django-tutorials/mastering-django-models/
 
 Todo : 
-	Teammembers applicaties : table teammembers, managers, teams
-	Login/Logout scherm gekoppeld aan accounts
+	Teams applicaties : table teammembers, managers, teams (python manage.py startapp teams)
+    Fatsoeneren van de login/logout/register html
+	OK : Login/Logout scherm gekoppeld aan accounts
  
-Voegen een users applicatie("accounts" )toe zodat we user management kunnen doen indien nodig.
 Voeg een teammembers applicatie toe om employee info in kaart te brengen.
 
