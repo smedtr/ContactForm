@@ -7,6 +7,8 @@ Sources :
         https://www.codingforentrepreneurs.com/blog/how-to-create-a-custom-django-user-model/
     DB tabel
 	    https://masteringdjango.com/django-tutorials/mastering-django-models/
+        https://masteringdjango.com/django-tutorials/mastering-django-advanced-models/
+        
 
 Todo : 
 	Teams applicaties : table teammembers, managers, teams (python manage.py startapp teams)

@@ -1,9 +1,9 @@
-from django.db import models
-from datetime import date 
+https://stackoverflow.com/questions/70978302/django-hierarchy-model-query
 
-# Create your models here.
+Zie ook : https://www.fullstackpython.com/django-db-models-datefield-examples.html
+Zie ook voor admin : https://www.nickmccullum.com/customize-django-admin-area-python/
 
-# OrgUnit, Employee, Organisation
+
 class OrgUnit(models.Model):
     # CHOICES
     HIERARCHICAL = 'HI'
@@ -17,19 +17,19 @@ class OrgUnit(models.Model):
     parent = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
-        verbose_name=('parent'),
+        verbose_name=_('parent'),
         related_name='children',
         blank=True,
         null=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
-    type = models.CharField(max_length=2,choices=TYPE_ORG_UNIT, db_index=True)
-    is_active = models.BooleanField(default=True)    
-    starting_at = models.DateField(default=date.today, null=True, blank=True)    
-    ending_at = models.DateField(null=True, blank=True)
+    name = models.CharField(_('name'), max_length=255)
+    description = 
+    #type = models.CharField(_('type'), max_length=55, null=True, blank=True, db_index=True)
+    type = models.CharField(_('type'), max_length=2,choices=TYPE_ORG_UNIT, db_index=True)
+    starting_at = models.DateTimeField(_('starting_at))
+    ending_at = models.DateTimeField(_('ending_at))
 
     # META CLASS
     class Meta:
