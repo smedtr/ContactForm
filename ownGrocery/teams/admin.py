@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from teams.models import OrgUnit
+from teams.models import OrgUnit, Worker, Supervisor
 
 # Register your models here.
  
@@ -21,7 +21,15 @@ class OrgUnitAdmin(admin.ModelAdmin):
         return list(list_of_children)
     get_children.short_description = "Children"
 
-    
+@admin.register(Worker)
+class WorkerAdmin(admin.ModelAdmin):
+    list_display = ("name","company", "manager")
+    ordering = ("name",)
+
+@admin.register(Supervisor)
+class SupervisorAdmin(admin.ModelAdmin):
+    list_display = ("employee", "type")
+
     
   
 
