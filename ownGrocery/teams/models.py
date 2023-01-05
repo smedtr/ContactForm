@@ -52,14 +52,7 @@ class Worker(models.Model):
         (KYNDRYL_BE, 'Kyndryl BE'),
         (PI_SQUARE, 'PI-SQUARE'),       
     )
-    manager = models.ForeignKey(
-        'Supervisor',
-        on_delete=models.CASCADE,
-        verbose_name=('manager'),
-        related_name='worker',
-        blank=True,
-        null=True,
-    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     company = models.CharField(max_length=7,choices=COMPANY_CODE, db_index=True)
@@ -78,13 +71,7 @@ class Worker(models.Model):
         return self.name
    
 class Supervisor(models.Model):
-    # CHOICES
-    HIERARCHICAL = 'HI'
-    FUNCTIONAL = 'FU'
-    TYPE_SUPERVISOR_ROLE = (
-        (HIERARCHICAL, 'Hierarchical Manager'),
-        (FUNCTIONAL, 'Functional Manager'),       
-    )
+    # 
     employee = models.ForeignKey(
         'Worker',
         on_delete=models.CASCADE,
@@ -93,10 +80,11 @@ class Supervisor(models.Model):
         blank=True,
         null=True,
     )
+
+    supervising_group = models.ManyToManyField(Worker, through='WorkerSupervisor',related_name='worker',)
     
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    type = models.CharField(max_length=2,choices=TYPE_SUPERVISOR_ROLE, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)    
     description = models.TextField(null=True, blank=True)    
     is_active = models.BooleanField(default=True)    
     starting_at = models.DateField(default=date.today, null=True, blank=True)    
@@ -109,4 +97,21 @@ class Supervisor(models.Model):
 
     def __str__(self):
         return self.employee.name
+
+class WorkerSupervisor(models.Model):
+    # CHOICES
+    HIERARCHICAL = 'HI'
+    FUNCTIONAL = 'FU'
+    TYPE_SUPERVISOR_ROLE = (
+        (HIERARCHICAL, 'Hierarchical Manager'),
+        (FUNCTIONAL, 'Functional Manager'),       
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Supervisor, on_delete=models.CASCADE)
+    type = models.CharField(max_length=2,choices=TYPE_SUPERVISOR_ROLE, db_index=True)
+    is_active = models.BooleanField(default=True)    
+    starting_at = models.DateField(default=date.today, null=True, blank=True)    
+    ending_at = models.DateField(null=True, blank=True)
     

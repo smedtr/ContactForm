@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from teams.models import OrgUnit, Worker, Supervisor
+from teams.models import OrgUnit, Worker, Supervisor, WorkerSupervisor
 
 # Register your models here.
  
@@ -23,13 +23,18 @@ class OrgUnitAdmin(admin.ModelAdmin):
 
 @admin.register(Worker)
 class WorkerAdmin(admin.ModelAdmin):
-    list_display = ("name","company", "manager")
+    list_display = ("name","company")
     ordering = ("name",)
 
 @admin.register(Supervisor)
 class SupervisorAdmin(admin.ModelAdmin):
-    list_display = ("employee", "type")
+    #list_display = ("employee", "type")
+    pass
 
+@admin.register(WorkerSupervisor)
+class WorkerSupervisorAdmin(admin.ModelAdmin):
+    #list_display = ("employee", "type")
+    pass
     
   
 
