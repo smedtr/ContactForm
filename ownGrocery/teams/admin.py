@@ -16,25 +16,40 @@ class OrgUnitAdmin(admin.ModelAdmin):
 
 
     def get_children(self, obj):
-        list_of_children = OrgUnit.objects.filter(parent=obj).values_list('name')
-        #str_list_children = ','.join(list(list_of_children))
+        list_of_children = OrgUnit.objects.filter(parent=obj).values_list('name')     
         return list(list_of_children)
     get_children.short_description = "Children"
 
 @admin.register(Worker)
 class WorkerAdmin(admin.ModelAdmin):
-    list_display = ("name","company")
+    list_display = ("name","company","get_supervisor")       
     ordering = ("name",)
 
+    def get_supervisor(self, obj):
+        get_supervisor = WorkerSupervisor.objects.filter(worker=obj.id).values_list('supervisor__employee__name')        
+        return list(get_supervisor)
+    get_supervisor.short_description = "Supervisor"
+
 @admin.register(Supervisor)
-class SupervisorAdmin(admin.ModelAdmin):
-    #list_display = ("employee", "type")
-    pass
+class SupervisorAdmin(admin.ModelAdmin):  
+    list_display = ("employee","get_supervisor_company","get_supervised_team") 
+    ordering = ("employee",)
+    
+    def get_supervisor_company(self, obj):
+        get_supervisor_company = Worker.objects.filter(id=obj.employee.id).values_list('company')              
+        return list(get_supervisor_company)
+    get_supervisor_company.short_description = "Company"   
+    
+    def get_supervised_team(self, obj):
+        get_supervised_team = WorkerSupervisor.objects.filter(supervisor=obj.id).values_list('worker__name')                
+        return list(get_supervised_team)
+    get_supervised_team.short_description = "Team"
 
 @admin.register(WorkerSupervisor)
 class WorkerSupervisorAdmin(admin.ModelAdmin):
-    #list_display = ("employee", "type")
-    pass
+    list_display = ("worker", "type","supervisor")
+    ordering = ("worker",)
+    
     
   
 
