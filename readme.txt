@@ -1,5 +1,7 @@
 Repo for integrating Django with Bootstrap5 layout.
 
+Github : https://github.com/smedtr/ContactForm
+
 Sources : 
     For the BS5 see : https://ngangasn.com/how-to-use-bootstrap-5-with-django-the-right-way/
     User management : 
@@ -11,7 +13,7 @@ Sources :
         
 
 Todo : 
-	Teams applicaties : table teammembers, managers, teams (python manage.py startapp teams)
+	OK : Teams applicaties : table teammembers, managers, teams (python manage.py startapp teams)
     OK : Fatsoeneren van de login/logout/register html
 	OK : Login/Logout scherm gekoppeld aan accounts
  
