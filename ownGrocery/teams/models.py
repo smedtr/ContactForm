@@ -1,7 +1,53 @@
 from django.db import models
 from datetime import date 
+from django.utils import timezone
 
 # Create your models here.
+
+#
+class OrgUnitQuerySet(models.QuerySet):
+    #    
+    # Zie https://spookylukey.github.io/django-views-the-right-way/thin-views.html
+    
+    def no_of_children(self,obj):        
+        return self.filter(parent=obj).count() 
+
+    def short_name(self,obj):
+        return(obj.name[-3].upper())       
+
+    def get_children(self, obj):
+        children = self.filter(parent=obj).values_list('name')
+        return list(children)   
+
+class WorkerQuerySet(models.QuerySet):
+    #    
+    # Zie https://spookylukey.github.io/django-views-the-right-way/thin-views.html
+    
+    # Voorbeeld van een filter met nu
+    # valid_from__lte=now,
+    # valid_to__gte=now,
+    now = timezone.now()
+    
+    def no_of_workers(self,obj):        
+        return self.filter(is_active=True).count()
+
+    def get_supervisor_company(self, obj):
+        get_supervisor_company = self.filter(id=obj.employee.id).values_list('company')   
+        return get_supervisor_company 
+   
+
+class WorkerSupervisorQuerySet(models.QuerySet):
+    #    
+    # Zie https://spookylukey.github.io/django-views-the-right-way/thin-views.html
+   
+    def get_supervisor(self, obj):
+        get_supervisor = self.filter(worker=obj.id).values_list('supervisor__employee__name')        
+        return get_supervisor   
+
+    def get_supervised_team(self, obj):
+        get_supervised_team = self.filter(supervisor=obj.id).values_list('worker__name')             
+        return get_supervised_team        
+    
 
 # OrgUnit, Employee, Organisation
 class OrgUnit(models.Model):
@@ -38,10 +84,11 @@ class OrgUnit(models.Model):
 
     def __str__(self):
         return self.name
+    
+    objects = OrgUnitQuerySet.as_manager()
+    
 
-    # Verschil tussen call method en property ? by de def komt er dan @propert te staan
-
-
+         
 class Worker(models.Model):
     # DATABASE FIELDS
     # CHOICES
@@ -69,6 +116,8 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name
+
+    objects = WorkerQuerySet.as_manager()
    
 class Supervisor(models.Model):
     # 
@@ -114,4 +163,7 @@ class WorkerSupervisor(models.Model):
     is_active = models.BooleanField(default=True)    
     starting_at = models.DateField(default=date.today, null=True, blank=True)    
     ending_at = models.DateField(null=True, blank=True)
+
+
+    objects = WorkerSupervisorQuerySet.as_manager()
     
