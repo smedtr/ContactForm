@@ -24,67 +24,10 @@ class Enrollment(models.Model):
     grade = models.CharField(max_length=1, blank=True, null=True)
 
 ----------------------------------------------------------------------
-class OrgUnit(models.Model):
-    parent = models.ForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        verbose_name=_('parent'),
-        related_name='children',
-        blank=True,
-        null=True,
-    )
-    name = models.CharField(_('name'), max_length=255)
-    type = models.CharField(_('type'), max_length=55, null=True, blank=True, db_index=True)
 
-cluster_id=1
-stores = OrgUnit.objects.filter(
-    type='store',
-    parent__parent_id=cluster_id
-)  
-
-sales_department_id=5
-cluster = OrgUnit.objects.select_related('parent__parent').get(pk=sales_department_id).parent.parent
-
-cluster_id = OrgUnit.objects.select_related('parent').get(pk=sales_department_id).parent.parent_id
-stores = OrgUnit.objects.filter(type='store', parent__parent_id=cluster_id)
-
-stores = OrgUnit.objects.filter(
-    type='store',
-    parent__parent__children__children__pk=sales_department_id
-)
-
-
-class OrgUnit(models.Model):
-    # CHOICES
-    HIERARCHICAL = 'HI'
-    FUNCTIONAL = 'FU'
-    TYPE_ORG_UNIT = (
-        (HIERARCHICAL, 'Hierarchical Unit'),
-        (FUNCTIONAL, 'Functional Unit'),       
-    )
-
-    # DATABASE FIELDS
-    parent = models.ForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        verbose_name=_('parent'),
-        related_name='children',
-        blank=True,
-        null=True,
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    name = models.CharField(_('name'), max_length=255)
-    description = 
-    #type = models.CharField(_('type'), max_length=55, null=True, blank=True, db_index=True)
-    type = models.CharField(_('type'), max_length=2,choices=TYPE_ORG_UNIT, db_index=True)
-    starting_at = models.DateTimeField(_('starting_at))
-    ending_at = models.DateTimeField(_('ending_at))
-
-    # META CLASS
-    class Meta:
-        verbose_name = 'org_unit'
-        verbose_name_plural = 'org_units'
-
-    def __str__(self):
-        return self.name
+Welke data wil ik zien : 
+    - ik log me in als worker : 
+        - dus ne query op worker. En dat geeft mij 1 record. Vandaag geen koppeling met de account.
+        - dan : 
+            - check of hij manager is, dan ook opvragen alle medewerkers die eraan gekoppeld zijn. 
+            - 

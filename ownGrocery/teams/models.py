@@ -1,6 +1,8 @@
 from django.db import models
-from datetime import date 
+from datetime import date, datetime
 from django.utils import timezone
+from django.utils.timezone import get_current_timezone, make_aware, now
+from django.db.models import Q
 
 # Create your models here.
 
@@ -23,13 +25,54 @@ class WorkerQuerySet(models.QuerySet):
     #    
     # Zie https://spookylukey.github.io/django-views-the-right-way/thin-views.html
     
-    # Voorbeeld van een filter met nu
-    # valid_from__lte=now,
-    # valid_to__gte=now,
-    now = timezone.now()
-    
-    def no_of_workers(self,obj):        
+   
+    def no_of_workers(self):        
         return self.filter(is_active=True).count()
+
+    def no_of_current_workers(self):  
+        # current date       
+        now = timezone.now()                   
+        # Example 6  https://www.fullstackpython.com/django-utils-timezone-now-examples.html
+        tz = get_current_timezone()
+        # date taken = 1 Feb 2023
+        future_date = make_aware(datetime(
+            int(2023),int(2),int(1)),tz)
+        # past date = 1 Feb 2022
+        past_date = make_aware(datetime(
+            int(2022),int(2),int(1)),tz)
+        #
+        ref_date = now
+        #
+        no_of_workers = self.filter(Q(is_active=True, 
+                                    starting_at__lte=ref_date,
+                                    ending_at__isnull=True) |
+                                    Q(is_active=True, 
+                                    starting_at__lte=ref_date,
+                                    ending_at__gte=ref_date) ).count()
+        return no_of_workers
+
+    def get_active_workers(self):             
+        # current date       
+        now = timezone.now()                   
+        # Example 6  https://www.fullstackpython.com/django-utils-timezone-now-examples.html
+        tz = get_current_timezone()
+        # date taken = 1 Feb 2023
+        future_date = make_aware(datetime(
+            int(2023),int(2),int(1)),tz)
+        # past date = 1 Feb 2022
+        past_date = make_aware(datetime(
+            int(2022),int(2),int(1)),tz)
+        #
+        ref_date = now
+        #print(ref_date) 
+        #
+        active_workers = self.filter(Q(is_active=True, 
+                                    starting_at__lte=ref_date,
+                                    ending_at__isnull=True) |
+                                    Q(is_active=True, 
+                                    starting_at__lte=ref_date,
+                                    ending_at__gte=ref_date)).values_list("name","company","description","starting_at","ending_at")
+        return active_workers
 
     def get_supervisor_company(self, obj):
         get_supervisor_company = self.filter(id=obj.employee.id).values_list('company')   

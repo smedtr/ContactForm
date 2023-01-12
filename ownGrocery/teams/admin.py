@@ -25,7 +25,7 @@ class OrgUnitAdmin(admin.ModelAdmin):
 
 @admin.register(Worker)
 class WorkerAdmin(admin.ModelAdmin):
-    list_display = ("name","company","no_of_workers","get_supervisor")       
+    list_display = ("name","company","no_of_workers","no_of_current_workers","get_supervisor")       
     ordering = ("name",)
         
     def get_supervisor(self, obj):
@@ -34,8 +34,13 @@ class WorkerAdmin(admin.ModelAdmin):
     get_supervisor.short_description = "Supervisor"
 
     def no_of_workers(self,obj):        
-        return Worker.objects.no_of_workers(obj)
+        return Worker.objects.no_of_workers()
     no_of_workers.short_description = "Aantal"
+
+    def no_of_current_workers(self,obj):        
+        return Worker.objects.no_of_current_workers()
+    no_of_current_workers.short_description = "Aantal"
+    
 
 @admin.register(Supervisor)
 class SupervisorAdmin(admin.ModelAdmin):  
